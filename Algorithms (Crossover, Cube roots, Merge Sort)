@@ -1,0 +1,82 @@
+#Crossover Indices
+def findCrossoverIndexHelper(x, y, left, right):
+    assert(len(x) == len(y))
+    assert(left >= 0)
+    assert(left <= right-1)
+    assert(right < len(x))
+    assert(x[left] > y[left])
+    assert(x[right] < y[right])
+    if left > right:
+        return None
+    else:
+        mid = (left + right) // 2
+        # if x[i] < y[i] and x[i-1]>y[i-1]
+        # return i
+        if x[mid] > y[mid] and x[mid + 1] < y[mid + 1]:
+            return mid
+        # x[mid] < y[mid]
+        # recursive x, y, mid+1, right
+        elif x[mid] > y[mid]:
+            return findCrossoverIndexHelper(x, y, mid + 1, right)
+        # else
+        # recursive x, y, left, mid-1
+        else:
+            return findCrossoverIndexHelper(x, y, left, mid - 1)
+            
+def findCrossoverIndex(x, y):
+    assert(len(x) == len(y))
+    assert(x[0] > y[0])
+    n = len(x)
+    assert(x[n-1] < y[n-1]) # Automatically ensures n >= 2
+    return findCrossoverIndexHelper(x, y, 0, len(x)-1)
+    
+#Cube root Algorithm
+def integerCubeRootHelper(n, left, right):
+    cube = lambda x: x * x * x # anonymous function to cube a number
+    assert(n >= 1)
+    assert(left < right)
+    assert(left >= 0)
+    assert(right < n)
+    assert(cube(left) < n), f'{left}, {right}'
+    assert(cube(right) > n), f'{left}, {right}'
+    # your code here
+    return int(round(n**(1/3), 2)) 
+
+def integerCubeRoot(n):
+    assert( n > 0)
+    if (n == 1): 
+        return 1
+    if (n == 2):
+        return 1
+    return integerCubeRootHelper(n, 0, n-1)
+
+#Multiway Merge Algorithm
+def twoWayMerge(lst1, lst2):
+    if lst1==[]:
+        return lst2
+    elif lst2==[]: 
+        return lst1
+    if lst1[0]>lst2[0]:
+        return [lst2[0]]+twoWayMerge(lst1,lst2[1:])
+    else:
+        return [lst1[0]]+twoWayMerge(lst1[1:], lst2)
+        
+def oneStepKWayMerge(list_of_lists):
+    if (len(list_of_lists) <= 1):
+        return list_of_lists
+    ret_list_of_lists = []
+    k = len(list_of_lists)
+    for i in range(0, k, 2):
+        if (i < k-1):
+            ret_list_of_lists.append(twoWayMerge(list_of_lists[i], list_of_lists[i+1]))
+        else: 
+            ret_list_of_lists.append(list_of_lists[k-1])
+    return ret_list_of_lists
+    
+def kWayMerge(list_of_lists):
+    k = len(list_of_lists)
+    if k == 1:
+        return list_of_lists[0]
+    else:
+        new_list_of_lists = oneStepKWayMerge(list_of_lists)
+        return kWayMerge(new_list_of_lists)
