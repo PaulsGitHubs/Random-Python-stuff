@@ -1,0 +1,86 @@
+Setting up GQRX on Kali Linux
+
+Installing Gnu Radio
+
+sudo apt-get install gnuradio
+
+Installing RTL SDR on Linux
+
+sudo apt install libusb-1.0-0-dev (dependency)
+
+https://osmocom.org/projects/rtl-sdr/wiki
+
+Installing gr-osmosdr
+
+https://git.osmocom.org/gr-osmosdr/about/
+
+Install https://www.doxygen.nl/download.html
+
+Install flex and bison : 
+
+sudo apt-get update 
+sudo apt-get upgrade 
+sudo apt-get install flex bison
+
+Go into root using: sudo su
+
+Then install apt-get install libsndfile-dev
+(When you want to compile something against a library you'll need not only the library itself, which is usually one or more .so type files, but the header files that describe how the library works. These are often omitted unless you install the -dev version of the package:)
+
+Then proceed with installing from the documentation /about/ ^^^
+
+Create a file called blacklist dvb_usb_rtl28xxu.config and add in:
+
+#blacklisting the rtl for us of dongle
+
+blacklist dvb_usb_rtl28xxu 	
+
+Then type in:
+
+reboot
+
+And test using rtl_test -t
+
+If no error occurs then mission is accomplished…
+
+Install Qt 5 
+
+https://wiki.qt.io/Install_Qt_5_on_Ubuntu (follow instruction on the page and below… then install sudo apt install qtcreator)
+
+https://doc.qt.io/qt-5/linux.html
+
+sudo apt-get install build-essential libgl1-mesa-dev
+
+Install gdb 
+
+http://www.gdbtutorial.com/tutorial/how-install-gdb
+
+(for running qt creator in linux - http://web.stanford.edu/class/archive/cs/cs106b/cs106b.1176//handouts/qt-creator-linux.html)
+
+When installing from the on-line source the file association is not done automatically. It also not show up when you try to associate it with file explorer. Create a file named “Qt-Creator.desktop” and fill the file with the following.
+[Desktop Entry] Version=1.0 Encoding=UTF-8 Type=Application Name=QtCreator Comment=QtCreator NoDsiplay=true Exec=(Install folder of QT)/Tools/QtCreator/bin/qtcreator %f Icon=(Install folder of QT)/5.4/Src/qtdoc/doc/images/landing/icon_QtCreator_78x78px.png Name[en_US]=Qt-Creator
+Press view and show hidden files in the folder menu… in order to see the .local
+
+Installed the following 
+sudo apt-get install qtbase5-dev
+sudo apt-get install qtdeclarative5-dev
+
+sudo apt install libqt5svg5-dev
+
+sudo apt install libqt5*-dev since was missing more than just 1 
+
+sudo apt install pulseaudio
+
+sudo apt-get install libpulse-dev
+
+sudo apt-get install -y libasound2-plugins
+
+sudo apt-get install libasound-dev
+
+sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
+
+Then run command
+
+sudo make install in directory /gqrx.git/build
+
+Then run and enjoy!
