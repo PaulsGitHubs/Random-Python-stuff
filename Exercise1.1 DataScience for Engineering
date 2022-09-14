@@ -1,0 +1,30 @@
+#Degrees Fahrenheit ($T_F$) are converted to degrees Celsius ($T_c$) using the formula:
+#T_c = 5(T_f - 32)/9
+
+T_f = 78
+T_c = 5*(T_f - 32)/9
+print(T_C)
+
+
+#mortgage affordabillity test tool
+#1. Loan principal (amount borrowed)
+#2. Official Bank Rate (percentage, expressed per annum)
+#3. Rate over the official Bank Rate (percentage, expressed per annum)
+
+principal = 150000
+bankrate = 0.005
+rateoverbankrate = 0.0149
+monthly_payments = (principal * (bankrate/12)) + (principal* (rateoverbankrate/12))
+print(monthly_payments)
+
+
+
+#Compare the computed values of 
+#d_0 = a \cdot b + a  \cdot  c
+#d_1 = a \cdot (b + c)
+#when $a = 100$, $b = 0.1$ and $c = 0.2$. Store $d_{0}$ in the variable `d0` and $d_{1}$ in the variable `d1`.
+
+a = 100; b =0.1; c=0.2
+d0 = (a*b) + (a*c)
+d1 = a*(b+c)
+print(d0 == d1)
