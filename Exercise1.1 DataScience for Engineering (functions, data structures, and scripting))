@@ -171,3 +171,67 @@ a = [2, 3]
 mult_by_two(a)
 print("Value of variable \'a\' post-function:", a)
 print("Value of variable \'a\' post-function:", a)
+
+# Basic Data Structures ---------------------------------------------------------------------------------
+
+#lists
+lab_group0 = ["Sarah", "John", "Joe", "Emily", "Quang"]
+print("Lab group members: {}".format(lab_group0))
+print("Size of lab group: {}".format(len(lab_group0)))
+print("Check the Python object type: {}".format(type(lab_group0)))
+for member in lab_group0:
+    print(member)
+for n, member in enumerate(lab_group0):
+    print(n, member)
+    
+#tuples, tuples cannot be changed after created.
+room = ("Laura", 32)
+print("Room allocation: {}".format(room))
+print("Length of entry: {}".format(len(room)))
+print(type(room))
+# Iterate over tuple values
+for d in room:
+    print(d)
+# Index into tuple values
+print(room[1])
+print(room[0])
+room = ("Adrian",)
+print("Room allocation: {}".format(room))
+print("Length of entry: {}".format(len(room)))
+print(type(room))
+room_allocation = [("Adrian",), ("Laura", 32), ("John", 31), ("Penelope", 28), ("Fraser", 28), ("Gaurav", 19)]
+print(room_allocation)
+room_allocation.sort()
+print(room_allocation)
+for entry in room_allocation:
+    if len(entry) > 1:
+        print("Name: {} \n  Room: {}".format(entry[0], entry[1]))
+
+#Dictionaries (maps)
+room_allocation = {"Adrian": None, "Laura": 32, "John": 31, "Penelope": 28, "Fraser": 28, "Gaurav": 19}
+print(room_allocation)
+print(type(room_allocation))
+frasers_room = room_allocation["Fraser"]
+print(frasers_room)
+frasers_room = room_allocation["Frasers"]
+print("Fraser" in room_allocation)
+print("Frasers" in room_allocation)
+for d in room_allocation:
+    print(d)
+for name, room_number in room_allocation.items():
+    print(name, room_number)
+    
+# Create empty dictionary
+room_allocation_inverse = {}
+# Build inverse dictionary to map 'room number' -> name 
+for name, room_number in room_allocation.items():
+    # Insert entry into dictionary
+    room_allocation_inverse[room_number] = name
+print(room_allocation_inverse)
+
+rooms_to_check = [28, 29]
+for room in rooms_to_check:
+    if room in room_allocation_inverse:
+        print("Room {} is occupied by {}.".format(room, room_allocation_inverse[room]))
+    else:
+        print("Room {} is unoccupied.".format(room))
