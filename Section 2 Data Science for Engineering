@@ -1,0 +1,110 @@
+import pandas as pd
+import os
+from google.colab import drive
+
+# read file without column indices and without header or column names, not load the first column as index, and not use the first row as header
+# Mount, change directory, and load the file. Remember to go through `read_csv` documentation to properly use the parameters
+drive.mount('/content/gdrive')
+os.chdir("/content/gdrive/My Drive/Data Science for Engineering Colab Notebooks/simulation_data")
+#!ls
+df = pd.read_csv('Baseline.csv', header=0, index_col=0)
+df_renamed = df.rename(columns={'Baseline': 'Consumption'})
+print(df_renamed)
+
+# filter the baseline consumption with the `consumption_threshold` variable
+consumption_threshold = 15
+filtered_df = df_renamed[df_renamed['Consumption'] > consumption_threshold]
+print(filtered_df)
+
+# Compute the savings for the month of `March`
+percentage = df_renamed._get_value('March', 'Consumption')/df_renamed.max() * 100
+print(percentage)
+
+----------------------------
+import pandas as pd
+from google.colab import drive
+drive.mount('/content/gdrive')
+import os
+os.chdir("/content/gdrive/My Drive/EDX Data Science for Construction, Architecture and Engineering/2 - Building Design - Intro to Pandas/simulation_data")
+
+#creating df 
+df = pd.DataFrame(
+[[4, 7, 10],
+[5, 8, 11],
+[6, 9, 12]],
+index=[1, 2, 3],
+columns=['a', 'b', 'c'])
+
+#loading file 
+baseline_data = pd.read_csv("Baseline.csv")
+
+#looking through it 
+baseline_data.index
+baseline_data.columns
+baseline_data.info()
+baseline_data['Baseline']
+baseline_data.Baseline
+baseline_data.head()
+baseline_data.tail()
+
+baseline_data[baseline_data['Baseline'] > 10]
+baseline_data.sample(frac=0.5)
+baseline_data.sample(n=3)
+
+baseline_data.sort_values('Baseline')
+baseline_data.sort_index()
+baseline_data.rename(columns={'Baseline':'Baseline Cooling Consumption in GWh'})
+
+#ploting
+baseline_data.plot()
+baseline_data.columns.name = 'Scenario'
+baseline_data.index.name = 'Months of the Year'
+baseline_data.plot(lw=2, colormap='jet', marker='.', markersize=10, 
+        title='Cooling Energy Consumption of Baseline Building in Total GWh')
+        
+#comparing two files
+schedule_scenario = pd.read_csv("Scenario - Aircon Schedules.csv", index_col="Month")
+
+#combining
+combined_data = pd.concat([baseline_data, schedule_scenario], axis=1)
+
+#plotting
+combined_data.plot(lw=2, colormap='jet', marker='.', markersize=10, 
+        title='Cooling Energy Consumption of Baseline Building in Total GWh')
+
+#differences 
+
+combined_data['Difference'] = combined_data['Baseline'] - combined_data['Scenario - Aircon Schedules']
+combined_data['Difference'].plot.bar(title='Difference between Baseline and Improved Schedules in Total GWh')
+
+#function for getting differences for all months except july
+def get_difference_conditional(monthly_data):
+  #print(monthly_data)
+  if monthly_data.name == 'July':
+    return 0
+  else:
+    return monthly_data['Baseline'] - monthly_data['Scenario - Aircon Schedules']
+
+#creating for loop to look through files and put them all together into one dataframe and then do comparisons using visualisation
+os.listdir()
+list_of_files = ['Scenario - Aircon Schedules.csv',
+ 'Scenario - Cool roof.csv',
+ 'Scenario - Rooftop Gardens.csv',
+ 'Scenario - Increase Setpoint.csv',
+ 'Scenario - Low-E Glass.csv',
+ 'Baseline.csv']
+ 
+ for filename in list_of_files:
+  print(filename)
+  
+  data_container = []
+for filename in list_of_files:
+  print(filename)
+  df = pd.read_csv(filename, index_col='Month')
+  data_container.append(df)
+all_data = pd.concat(data_container, axis=1)
+
+all_data.plot(lw=2, colormap='jet', marker='.', markersize=10, 
+        title='Cooling Energy Consumption of Baseline Building in Total GWh', figsize=(15,8))
+        
+all_data.subtract(all_data['Baseline'], axis=0).sum().plot.bar()
