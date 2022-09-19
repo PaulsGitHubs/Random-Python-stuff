@@ -22,6 +22,60 @@ print(percentage)
 
 ----------------------------
 import pandas as pd
+import os
+from google.colab import drive
+
+drive.mount('/content/gdrive')
+os.chdir("/content/gdrive/My Drive/Data Science for Engineering Colab Notebooks/simulation_data")
+!ls
+
+data_container = []
+list_of_files = ['Scenario - Aircon Schedules.csv',
+ 'Scenario - Increase Setpoint.csv',
+ 'Scenario - Cool roof.csv',
+ 'Scenario - Rooftop Gardens.csv',
+ 'Scenario - Low-E Glass.csv',
+ 'Baseline.csv']
+
+ef load_all_csv(files_names):
+    # Follow this function template: take a list of file names and return one dataframe
+    for filename in files_names:
+      df = pd.read_csv(filename, index_col='Month')
+      data_container.append(df)
+    all_data = pd.concat(data_container, axis=1)
+    return all_data
+
+# Use the function you just defined and load all the files
+all_data_new = load_all_csv(list_of_files)
+load_all_csv(list_of_files)
+
+# Select only the baseline and simulation scenarios asked.
+newdata = all_data_new.loc[:, ['Baseline', 'Scenario - Aircon Schedules', 'Scenario - Increase Setpoint']]
+print(newdata)
+
+# You can use the variable `savings` to keep track of the increase from baseline to best scenario
+#calculate savings for each month and find out the total savings and highest month in saving out of all 3 scenarios (columns)
+lowest_values_index_month = newdata.min(axis=1)
+lv = lowest_values_index_month.to_frame
+print(newdata.iloc[:].min(axis=1))
+
+highest_values_index_month = newdata.max(axis=1)
+hv = highest_values_index_month.to_frame
+print(newdata.iloc[:].max(axis=1))
+
+print(lowest_values_index_month/highest_values_index_month)
+
+percentage = (1 - (lowest_values_index_month/highest_values_index_month)) * 100
+print(percentage)
+
+print(percentage.max())
+
+Totalsavings = percentage.sum()
+print(Totalsavings)
+
+----------------------------
+
+import pandas as pd
 from google.colab import drive
 drive.mount('/content/gdrive')
 import os
