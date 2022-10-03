@@ -1,0 +1,10 @@
+from pygame import mixer
+from gtts import gTTS
+def texttospeech():
+   texttospeech = gTTS('the tect you want converted')
+   texttospeech.save('final.mp3')
+   mixer.init()
+   mixer.music.load('final.mp3')
+   mixer.music.play()
+if __name__ == "__main__":
+   texttospeech()
