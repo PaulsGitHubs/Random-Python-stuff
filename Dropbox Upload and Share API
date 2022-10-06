@@ -1,0 +1,10 @@
+# Get Your API: https://www.dropbox.com/developers/
+# pip install dropbox
+import dropbox
+dbx = dropbox.Dropbox('Your Api Key')
+# upload
+with open('test.txt', 'rb') as f:
+    dbx.files_upload(f.read(), '/test.txt')
+    
+# download
+dbx.files_download_to_file('test.txt', '/test.txt')
