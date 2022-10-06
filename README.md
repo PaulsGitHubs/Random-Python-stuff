@@ -1,1 +1,1 @@
-Programming material from courses or scripts I have been working on or used.
+Programming material from courses or programs/scripts I have been working on or used.
