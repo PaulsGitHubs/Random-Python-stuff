@@ -1,0 +1,29 @@
+# Get your API : developers.themoviedb.org
+# pip install tmdbsimple
+
+import tmdbsimple as imdb
+
+imdb.API_KEY = 'YOUR_API_KEY'
+# search movies by Name
+m = imdb.search.movie(query='Jurassic Park')
+response = m.info()
+# get movie title
+print(m.title)
+# get movie budget
+print(m.budget)
+# get movie rating
+print(m.rating)
+# get movie reviews
+print(m.reviews())
+# get similar movies
+print(m.similar_movies())
+# get runtime
+print(m.runtime)
+# Search movie By ID
+m = imdb.Movies(135397)
+m = m.info()
+# Search TV Shows
+tvshow = imdb.search.tv(query='Game of Thrones')
+response = tvshow.info()
+print(tvshow.name)
+print(tvshow.overview)
