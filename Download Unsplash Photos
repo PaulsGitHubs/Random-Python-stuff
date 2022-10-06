@@ -1,0 +1,13 @@
+# Get Your API: https://unsplash.com/developers
+
+import requests
+
+apikey = "Your Api Key"
+query = "Laptop"
+api_url = f"https://api.unsplash.com/search/photos?query={query}&per_page=30&page=1&client_id={apikey}"
+r = requests.get(api_url)
+r = r.json()
+
+# fetch download url
+for down in r['results']:
+    print(down['links']['download'])
