@@ -1,1 +1,52 @@
+#exercise 3.1
 
+import pandas as pd
+from google.colab import drive
+import os
+import numpy as np
+
+drive.mount('/content/gdrive')
+
+# read meta data file as pandas dataframe and assign to the corresponding variables
+os.chdir("/content/gdrive/My Drive/Data Science for Engineering Colab Notebooks/3 - Construction - Pandas Fundamentals")
+metadata = pd.read_csv('all_buildings_meta_data.csv')
+
+from time import timezone
+# Retrieve the required information according to the given conditions
+# YOUR CODE HERE
+a= metadata.set_index('timezone') # sets index to timezone
+a2 = a.loc[['America/Phoenix'], ['sqm','primaryspaceusage', 'uid', 'nickname', 'newweatherfilename', 'yearbuilt']] #loc takes values[[rows],[columns]]
+a2 = a2[a2['sqm']>30000] #filtering 
+identified_building = a2[a2['primaryspaceusage'] == 'College Laboratory'] #filtering 
+print(identified_building.iloc[0]) #to print out only get the first row and the values
+
+# Load the specific energy consumption and weather data as identified 
+# YOUR CODE HERE
+os.chdir("/content/gdrive/My Drive/Data Science for Engineering Colab Notebooks/3 - Construction - Pandas Fundamentals/meter_data")
+UnivLab_Ashlynn_Meter_Data = pd.read_csv('UnivLab_Ashlynn.csv', index_col = 'timestamp', parse_dates= True)
+os.chdir("/content/gdrive/My Drive/Data Science for Engineering Colab Notebooks/3 - Construction - Pandas Fundamentals/weather_data")
+UnivLab_Ashlynn_Weather1 = pd.read_csv('weather0.csv', index_col = 'timestamp', parse_dates=True)
+UnivLab_Ashlynn_Weather = UnivLab_Ashlynn_Weather1[['TemperatureC', 'Humidity']]
+print(UnivLab_Ashlynn_Meter_Data)
+print(UnivLab_Ashlynn_Weather)
+
+# properly resample and concatenate the data
+# YOUR CODE HERE
+datacontainer = []
+UnivLab_Ashlynn_Weather.resample('H').mean()
+UnivLab_Ashlynn_Meter_Data.resample('H').mean()
+MeterandWeather = datacontainer.append(UnivLab_Ashlynn_Weather)
+nd = datacontainer.append(UnivLab_Ashlynn_Meter_Data)
+rd = pd.concat(datacontainer, axis=0)
+print(rd)
+
+# Do the weekly calculation
+# YOUR CODE HERE
+rd.resample('W').sum()
+
+# Process and visualize the data as required
+# YOUR CODE HERE
+rd.plot()
+
+#Please write down the week with the abnormal average temperature (in the form of '2015-XX-XX') as the answer for the quiz question.
+2015-09-06
