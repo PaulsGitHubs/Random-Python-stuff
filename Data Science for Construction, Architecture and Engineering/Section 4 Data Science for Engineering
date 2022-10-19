@@ -1,0 +1,50 @@
+# Import packages
+import pandas as pd
+from google.colab import drive
+import os
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Set path for data source
+drive.mount('/content/gdrive')
+os.chdir("/content/gdrive/My Drive/Data Science for Engineering Colab Notebooks/")
+
+# Load thermal comfort database
+ieq_data = pd.read_csv("ashrae_thermal_comfort_database_2.csv", index_col='Unnamed: 0')
+
+# Boxplot for Thermal sensation under different cooling strategies
+ieq_data[['Air temperature (C)','Cooling startegy_building level']].groupby('Cooling startegy_building level').boxplot(figsize=(10,10))
+Air Conditioned                 AxesSubplot(0.1,0.559091;0.363636x0.340909)
+Mechanically Ventilated    AxesSubplot(0.536364,0.559091;0.363636x0.340909)
+Mixed Mode                          AxesSubplot(0.1,0.15;0.363636x0.340909)
+Naturally Ventilated           AxesSubplot(0.536364,0.15;0.363636x0.340909)
+dtype: object
+
+# Boxplot for "Air temperature (C)" under different building types
+# YOUR CODE HERE
+ieq_data[['Air temperature (C)','Building type']].groupby('Building type').boxplot(figsize=(10,10))
+#answ = Multifamily housing > Classroom > Office > Others > Senior center
+
+# There is a Pandas function that enables you to do this in a *single line of code*
+# YOUR CODE HERE 
+median = ieq_data[['Air temperature (C)','Building type']].groupby('Building type').median()
+print(median)
+#Answ = Multifam housing 29.8
+
+# YOUR CODE HERE
+T = df['Air temperature (C)']
+R = df['Relative humidity (%)']
+#HI = heat index (in degrees Celsius)
+#T = ambient dry-bulb temperature (in degrees Celsius)
+#R = relative humidity (percentage value between 0 and 100)
+c1 = -8.78469475556
+c2 = 1.61139411
+c3 = 2.33854883889
+c4 = -0.14611605
+c5 = -0.012308094
+c6 = -0.0164248277778
+c7 = 0.002211732
+c8 = 0.00072546
+c9 = -0.000003582
+HI = c1+c2T+c3R+(c4*T*R)+(c5*(T**2))+c6R**2+c7T**2R+c8TR**2+c9T**2R**2
+ieq_data['HI']= HI
