@@ -46,5 +46,5 @@ c6 = -0.0164248277778
 c7 = 0.002211732
 c8 = 0.00072546
 c9 = -0.000003582
-HI = c1+c2T+c3R+(c4*T*R)+(c5*(T**2))+c6R**2+c7T**2R+c8TR**2+c9T**2R**2
+HI = c1+c2T+c3R+(c4*T*R)+(c5*(T**2))+c6R**2+c7T**2R+c8TR**2+c9T**2R**2 #put brackets around notations in order to get the correct order...  if you want the answer
 ieq_data['HI']= HI
