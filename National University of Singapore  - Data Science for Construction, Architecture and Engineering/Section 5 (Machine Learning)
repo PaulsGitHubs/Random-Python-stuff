@@ -1,0 +1,86 @@
+#5.1
+# Import packages
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+import matplotlib
+from matplotlib import cm
+
+import sklearn
+from sklearn import metrics
+
+from scipy.cluster.vq import kmeans, vq, whiten
+from scipy.spatial.distance import cdist
+import numpy as np
+from datetime import datetime
+import seaborn as sns
+
+# Mount the drive
+from google.colab import drive
+drive.mount('/content/gdrive')
+# Change directory location (hint: chdir)
+os.chdir("/content/gdrive/My Drive/Data Science for Engineering Colab Notebooks/3 - Construction - Pandas Fundamentals/meter_data")
+
+# Find the day of the week with the maximum average energy consumption
+# YOUR CODE HERE
+df = pd.read_csv('UnivDorm_Ashleigh.csv', index_col = 'timestamp', parse_dates=True)
+df['Date'] = df.index.map(lambda x: x.date()) #creates column date
+df['Time'] = df.index.map(lambda x: x.time()) #creates column time
+Days = df.groupby('Date').mean()
+Days['Weekday'] = Days.index.map(lambda x: x.weekday())
+Dayspivot = pd.pivot_table(Days, 'UnivDorm_Ashleigh', columns = 'Weekday', aggfunc ='mean') # pivot it to get days of week as columns, then find the smalles mean (average)
+Dayspivot
+#answer = 1 (Tuesdays)
+
+# Reload the data file and create a normalized dataframe
+# YOUR CODE HERE 
+df = pd.read_csv('UnivDorm_Ashleigh.csv', index_col = 'timestamp', parse_dates=True)
+min_max_norm = (df - df.min()) / (df.max() - df.min())
+min_max_norm
+
+# Create weekly profiles and day of week to the normalized dataframe. 
+# Create a pivoted DataFrame 
+# YOUR CODE HERE 
+df['Week'] = df.index.map(lambda x: x.week) #creates column date
+df['DayofWeek'] = df.index.map(lambda x: x.dayofweek) #creates column time
+min_max_norm['DayofWeek'] = df.index.map(lambda x: x.dayofweek) #creates column time
+min_max_norm['Week'] = df.index.map(lambda x: x.week) #creates column time
+
+weeklyprofile = pd.pivot_table(df, values = 'UnivDorm_Ashleigh', index = 'Week', columns='DayofWeek', aggfunc= 'mean')
+weeklyprofile_norm = pd.pivot_table(df, values = 'UnivDorm_Ashleigh', index = 'Week', columns='DayofWeek', aggfunc= 'mean')
+
+# Create two clusters out of the normlized dataframe using k-means
+# YOUR CODE HERE 
+norm_clusters_matrix = np.matrix(weeklyprofile_norm.dropna())
+#print(norm_clusters_matrix)
+centers, _ = kmeans(norm_clusters_matrix, 2, iter=10000)
+print(centers)
+clusters, _ = vq(norm_clusters_matrix, centers)
+print(clusters)
+
+# Assign the cluster number into a new column called "ClusterNo"
+# YOUR CODE HERE 
+clusterdf = pd.DataFrame(clusters, columns=['ClusterNo'])
+weeklyclusters = pd.concat([weeklyprofile.dropna().reset_index(), clusterdf], axis =1)
+weeklyclusters['sum'] = weeklyclusters.sum(axis=1)
+weeklyclusters[['Week', 'sum']][weeklyclusters['ClusterNo']==1]
+#### Answer is week 11 !
+
+# Plot the clusters with different colors and find the number of weeks with low energy consumption??
+# YOUR CODE HERE 
+a = weeklyclusters[['Week', 'sum']][weeklyclusters['ClusterNo']==1]
+
+weekplot = a.plot(style = '^', x='week', y = 'sum'  markersize=15)
+
+"""
+clusterlist = list(weeklyclusters.columns.get_level_values(0).unique())
+matplotlib.rcParams['figure.figsize'] = 10, 10
+
+styles2 = ['LightSkyBlue', 'b','LightGreen', 'g','LightCoral','r','SandyBrown','Orange','Plum','Purple','Gold','b']
+fig, ax = plt.subplots()
+for col, style in zip(clusterlist, styles2):
+    weeklyclusters[col].plot(ax=ax, legend=False, style=style, alpha=1)
+
+#ax.set_ylabel('Total Daily Profile')
+#ax.set_xlabel('Time of Day');
+"""
