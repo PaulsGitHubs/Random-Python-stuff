@@ -2,4 +2,6 @@ You can install Pip by opening terminal and running:
 
 python get-pip.py 
 
-You must have a version of Python before attempting to install pip with the script provided
+You must have a version of Python before attempting to install pip with the script provided.
+
+Thanks.
